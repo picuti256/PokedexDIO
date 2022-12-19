@@ -4,20 +4,22 @@ pokeApi.getPokemons().then((pokemonList = []) => {
     pokemonOl.innerHTML += pokemonList.map(convertPokemonToList).join('')
 })
 
+const convertPokemonTypesToLi = (pokeTypes) => {
+    return pokeTypes.map((typeSlot) => `<li class="type"> ${typeSlot.type.name}</li>`)
+}
 
-
+const officialArtwork = 'official-artwork'
 
 const convertPokemonToList = (pokemon) => {
     return `<li class="pokemon">
-        <span class="pokeNumber">#001</span>
+        <span class="pokeNumber">#${pokemon.order}</span>
         <span class="pokeName">${pokemon.name}</span>
     
         <div class="pokeInfo">
             <ol class="pokeTypes">
-                <li class="type">Grass</li>
-                <li class="type">Poison</li>
+                ${convertPokemonTypesToLi(pokemon.types).join('')}
             </ol>
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="${pokemon.name}" />
+            <img src="" alt="${pokemon.name}" />
         </div>
     </li>`
 }
