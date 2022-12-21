@@ -1,23 +1,35 @@
-const pokemonOl = document.getElementById('pokeList')
+const pokemonOl = document.getElementById('pokeList');
+const loadMoreButton = document.getElementById('loadMore');
+const limit = 15;
+let offset = 0;
 
-pokeApi.getPokemons().then((pokemonList = []) => {
-    pokemonOl.innerHTML += pokemonList.map(convertPokemonToList).join('')
-})
+
 
 
 // const officialArtwork = ['pokemon.sprites.pokemon.sprites.other["official-artwork"].front_default']
 // const officialArtwork = 'pokemon.sprites.other.dream_world.front_default'
 
-const convertPokemonToList = (pokemon) => {
-    return `<li class="pokemon ${pokemon.type}">
-        <span class="pokeNumber">#${pokemon.number}</span>
+
+const loadPokemonItens = ((offset, limit) => {
+    pokeApi.getPokemons(offset, limit).then((pokemons = []) => {
+        const newHtml = pokemons.map((pokemon) => `<li class="pokemon ${pokemon.type}">
+        <span class="pokeNumber">#${pokemon.pokeNumber}</span>
         <span class="pokeName">${pokemon.name}</span>
     
         <div class="pokeInfo">
             <ol class="pokeTypes">
-                ${pokemon.types.map((type) => `<li class="type"> ${type}</li>`).join('')}
+                ${pokemon.types.map((type) => `<li class="type ${type}"> ${type}</li>`).join('')}
             </ol>
             <img src="${pokemon.image}" alt="${pokemon.name}" />
         </div>
-    </li>`
-}
+    </li>`).join('')
+        pokemonOl.innerHTML += newHtml
+    })
+});
+
+loadPokemonItens(offset, limit)
+
+loadMoreButton.addEventListener('click', () => {
+    offset += limit;
+    loadPokemonItens(offset, limit)
+});
